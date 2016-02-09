@@ -10,6 +10,9 @@ var gulp             = require('gulp'),
     livereload       = require('gulp-livereload'),
     plumber          = require('gulp-plumber'),
     path             = require('path'),
+    tsc = require('gulp-typescript'),
+    tsProject = tsc.createProject('tsconfig.json'),
+    sourcemaps = require('gulp-sourcemaps'),
     browserSync = require('browser-sync').create(),
     reload = browserSync.reload;
 
@@ -78,6 +81,7 @@ gulp.task('live', function() {
             browserSync.reload();
     });
 });
+// server
 gulp.task('serve', function() {
     browserSync.init({
         server: {
@@ -89,5 +93,21 @@ gulp.task('serve', function() {
 gulp.task('reloady', ['live'], function() {
     console.log("Reload SHOULD have happened.");
     browserSync.reload();
+});
+//Typescript task
+gulp.task('compile-ts', function() {
+    var sourceTsFiles = [
+        config.allTs,
+        config.typings
+    ];
+
+    var tsResult = gulp
+        .src(sourceTsFiles)
+        .pipe(sourcemaps.init())
+        .pipe(tsc(tsProject));
+
+    return tsResult.js
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(config.tsOutputPath))
 });
 gulp.task('default',['serve','styles','scripts','reloady']);
