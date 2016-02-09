@@ -35,11 +35,12 @@ gulp.task('styles', function() {
     return gulp.src(['src/scss/**/*.scss'])
         .pipe(plumber(plumberErrorHandler))
         .pipe(compass({
+            config_file: 'config.rb',
             css: 'html/css',
             sass: 'src/scss',
             image: 'html/images'
         }))
-        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+        //.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
         .pipe(gulp.dest('html/css'))
         .pipe(rename({ suffix: '.min' }))
         .pipe(minifycss())
